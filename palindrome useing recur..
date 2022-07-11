@@ -1,0 +1,43 @@
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+ // #define int long long int
+// int cnt = 0;
+
+bool palindrome(int i,string &s){
+  if (i>=s.size()/2)
+  
+    return true;
+  
+  if (s[i]!=s[s.size()-1-i])
+  
+    return false;
+  
+  return palindrome(i+1 ,s);
+  
+  
+}
+
+
+int32_t main() {
+  
+ ios_base::sync_with_stdio(false);
+ cin.tie(NULL); cout.tie(NULL);
+
+string s ="madam";
+// cin>>na;
+cout<<palindrome(0,s);
+
+
+
+
+
+
+    return 0;
+}
+
+
+
+
