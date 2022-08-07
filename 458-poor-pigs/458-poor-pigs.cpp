@@ -1,6 +1,9 @@
 class Solution {
 public:
-    int poorPigs(int buckets, int poisonTime, int totalTime) {
-        return ceil(log(buckets) / log(totalTime / poisonTime + 1));
+    int poorPigs(int buckets, int mtd, int mtt) {
+        if(buckets == 1) return 0;
+        int ans = 1;
+        for(int p=1; pow((mtt / mtd) + 1, p) < buckets; p++) ans++;
+        return ans;
     }
 };
