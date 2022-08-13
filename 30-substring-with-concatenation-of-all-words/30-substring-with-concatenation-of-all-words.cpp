@@ -1,56 +1,56 @@
 class Solution {
 public:
+    vector<vector<int>> str2words;
+    vector<vector<int>> words2str;
+    int pre_stop;
+    int max_len(int start, vector<int>& cnt, vector<string>&words){
+        if(start >= str2words.size() || pre_stop == words.size())
+            return 0;
+        int max_ret = 0;
+        vector<string>tried;
+        for(int word : str2words[start]){
+            if(!tried.empty() && words[word] == tried.back()){
+                continue;
+            }
+            if(cnt[word] > 0){
+                cnt[word]--;
+                tried.push_back(words[word]);
+                max_ret = max(max_ret, max_len(start + words[word].size(), cnt, words) + 1);
+                cnt[word]++;
+            }
+        }
+        pre_stop = max(pre_stop, max_ret);
+        return max_ret;
+    }
     vector<int> findSubstring(string s, vector<string>& words) {
-        
-        unordered_map<string, int> M, temp;
-        vector<int> Ans;
-        int N = words.size();
-        int L = words[0].size();
-        
-        // Store all the frequencies of all strings
-        // in the array words[]
-        for(auto &it : words) {
-            M[it]++;
-        }
-        int size = s.length();
-        
-        // Loop till possible number of starting
-        // index of the valid indices
-        for(int i = 0; i < size - N*L + 1; i++) {
-            
-            // Iterate the current window of
-            // length N*L over the range
-            // [i, i + N*L] and extract the
-            // substring of length L and store
-            // it's frequency
-            for(int j = i; j < i + N*L; j+= L) {
-                string ans = s.substr(j, L);
-                temp[ans]++;
+        int len = words.size(), slen = s.size(), sum = 0;;
+        sort(words.begin(), words.end());
+        str2words = vector<vector<int>>(slen);
+        vector<string> uniquewords;
+        vector<int> cnt;
+        for(int i = 0; i < len; i++){
+            sum += words[i].size();
+            if(i > 0 && words[i] == words[i - 1]){
+                cnt[cnt.size() - 1]++;
+                continue;
             }
-            
-            int flag = 1;
-            
-            // Now, check if the frequency of each string
-            // in map M is the same as the frequency in
-            // map temp. This ensure that the current
-            // window is of the same concatenation of
-            // the strings in the array words[]
-            for(auto &it : M) {
-                if(M[it.first] != temp[it.first]) {
-                    flag = 0;
-                    break;
-                }
+            int find = s.find(words[i]);
+            words2str.push_back({});
+            while(find != -1){
+                str2words[find].push_back(cnt.size());
+                words2str[cnt.size()].push_back(find);
+                find = s.find(words[i], find + 1);
             }
-            
-            // If the current window is the possible
-			// result then store the starting index of it
-            if(flag) Ans.push_back(i);
-            
-            // Clear the temp for another window
-            temp.clear();
+            uniquewords.push_back(words[i]);
+            cnt.push_back(1);
         }
-        
-        // Return the resultant vector of indices
-        return Ans;
+        vector<int> ret;
+        for(int i = 0; i <= slen - sum; i++){
+            vector<int> tmp = cnt;
+            pre_stop = 0;
+            if(max_len(i, tmp, uniquewords) == len)
+                ret.push_back(i);
+        }
+        return ret;
     }
 };
