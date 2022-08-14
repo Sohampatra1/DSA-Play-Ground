@@ -35,8 +35,7 @@ class Solution {
             step++;
         }
         if(!found) return(res);
-        //System.out.println(step);
-        //System.out.println(map);
+        
         goal = step;
         List<String> list = new LinkedList<>();
         list.add(es);
