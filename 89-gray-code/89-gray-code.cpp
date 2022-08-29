@@ -16,7 +16,7 @@ public:
     vector<int> grayCode(int n) {
         vector<int> ans;
         for(auto it : solve(n))
-            ans.push_back(stoi(it,0,2)); // converting from binary to int
+            ans.push_back(stoi(it,0,2)); 
         return ans;
     }
 };
